@@ -135,24 +135,32 @@ if datne:
     with rez6:
         st.metric("+/-", m_pm, pm)
 
-# Izveido datu bāzes savienojumu
-conn = psycopg2.connect(user='ShadowVlad', password='qwerty12321051', host='basketbols.csa31i8ih5ro.eu-north-1.rds.amazonaws.com', database='Basketbols')
+# Initialize connection.
+# Uses st.experimental_singleton to only run once.
+@st.experimental_singleton
+def init_connection():
+    return psycopg2.connect(**st.secrets["postgres"])
 
-# Izveido cursor objektu
-cursor = conn.cursor()
+conn = init_connection()
+
+# Perform query.
+# Uses st.experimental_memo to only rerun when the query changes or after 10 min.
+@st.experimental_memo(ttl=600)
+def run_query(query):
+    with conn.cursor() as cur:
+        cur.execute(query, (a, b))
+        return cur.fetchall()
 
 #  SQL vaicājum datu ievadīšanai datu bāze
-query = (
+run_query = (
         "INSERT INTO rezultati (majnieku_rez, viesu_rez) "
         "VALUES (%s, %s)"
 )
 
 # Izpilda SQL vaicājums un ievada izvelēti dati tabulā
-cursor.execute(query, (a, b))
+
 
 # Sinhronizē ar datubāzi
 conn.commit()
 
 # Aizvēr piekļūvi datu bāzei
-cursor.close()
-conn.close()
