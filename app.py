@@ -1,7 +1,7 @@
 # Nepieciešamo moduļu pievienošana
+import psycopg2
 import streamlit as st
 import pandas as pd
-import psycopg2
 
 # Pārlūkprogrammas cilnes virsraksts un attēls
 st.set_page_config(page_title="Projektēšanas laboratorija", page_icon=":basketball:", layout="wide")
