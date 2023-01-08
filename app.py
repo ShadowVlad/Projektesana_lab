@@ -156,11 +156,3 @@ run_query = (
         "INSERT INTO rezultati (majnieku_rez, viesu_rez) "
         "VALUES (%s, %s)"
 )
-
-# Izpilda SQL vaicājums un ievada izvelēti dati tabulā
-
-
-# Sinhronizē ar datubāzi
-conn.commit()
-
-# Aizvēr piekļūvi datu bāzei
